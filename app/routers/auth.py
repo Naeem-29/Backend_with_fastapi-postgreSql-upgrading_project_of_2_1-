@@ -5,7 +5,7 @@ from ..models import User
 from ..schemas import UserCreate,UserResponse,Userlogin,Token
 from ..auth.hashing import hash_password,verify_password
 from ..auth.jwt_handler import create_access_token
-
+from ..auth.oauth2 import get_current_admin
 
 router = APIRouter(
     prefix="/auth",
@@ -57,3 +57,14 @@ def login(
         "access_token": access_token,
         "token_type":"bearer"
     }
+
+@router.post("/photos")
+def upload_photo(
+    current_admin: User = Depends(get_current_admin)
+
+):
+    pass
+
+@router.post("/photos")
+def upload_photo():
+    return {"message": "works"}

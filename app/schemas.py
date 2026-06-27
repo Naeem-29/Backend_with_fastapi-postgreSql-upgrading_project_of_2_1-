@@ -43,3 +43,14 @@ class Token(BaseModel):
      access_token: str
      token_type: str
 
+class CommentCreate(BaseModel):
+    body: str
+
+class CommentResponse(BaseModel):
+    id: int
+    body: str
+    user_id: int
+    photo_id: int
+
+    class Config:
+        from_attributes = True

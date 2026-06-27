@@ -16,6 +16,7 @@ def verify_access_token(token: str):
         )
 
         user_id = payload.get("user_id")
+        is_admin=payload.get("is_admin")
 
         if user_id is None:
             raise HTTPException(
@@ -24,8 +25,8 @@ def verify_access_token(token: str):
             )
 
         return {
-            "user_id": payload.get("user_id"),
-            "is_admin": payload.get("is_admin")
+            "user_id": user_id,
+            "is_admin": is_admin
         }
 
     except JWTError:
@@ -39,4 +40,13 @@ def get_current_user(
     token: str = Depends(oauth2_scheme)
 ):
     return verify_access_token(token)
-   
+
+def get_current_admin(
+        current_user=Depends(get_current_user)
+):
+    if not current_user["is_admin"]:
+        raise HTTPException(
+            status_code=403,
+            detail="Admin only"
+        )
+    return current_user
